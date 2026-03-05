@@ -1,0 +1,8 @@
+{
+  "name": "vef-monorepo",
+  "private": true,
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ]
+}
