@@ -216,8 +216,8 @@ export function TwoChart({
         two.update();
 
         return () => {
+            two.pause();
             two.clear();
-            two.release(el);
             twoRef.current = null;
         };
     }, [width, height, series, scatter, xLabel, yLabel, title, padding, toScreenX, toScreenY, chartW, chartH, xMin, xMax, yMin, yMax]);
