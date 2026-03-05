@@ -1,4 +1,14 @@
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { createContext, useContext, useState, useCallback, useRef, ReactNode, useEffect } from "react";
+
+export interface CitationEntry {
+    id: string;
+    title: string;
+    author?: string;
+    year?: number;
+    url?: string;
+    publisher?: string;
+    accessDate?: string;
+}
 
 export interface PresentationContextType {
     currentSlide: number;
@@ -10,6 +20,10 @@ export interface PresentationContextType {
     printMode: boolean;
     setPrintMode: (mode: boolean) => void;
     printToPDF: () => void;
+    // Citation system
+    registerCitation: (entry: CitationEntry) => number;
+    getCitations: () => CitationEntry[];
+    getCitationNumber: (id: string) => number | undefined;
 }
 
 const PresentationContext = createContext<PresentationContextType | undefined>(undefined);
@@ -26,6 +40,30 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [totalSlides, setTotalSlides] = useState(0);
     const [printMode, setPrintMode] = useState(false);
+
+    // Citation registry — Map preserves insertion order
+    const citationsRef = useRef<Map<string, CitationEntry>>(new Map());
+    const [, forceUpdate] = useState(0);
+
+    const registerCitation = useCallback((entry: CitationEntry): number => {
+        const map = citationsRef.current;
+        if (!map.has(entry.id)) {
+            map.set(entry.id, entry);
+            forceUpdate((n) => n + 1); // trigger re-render for BibliographySlide
+        }
+        // Return 1-based citation number
+        return Array.from(map.keys()).indexOf(entry.id) + 1;
+    }, []);
+
+    const getCitations = useCallback((): CitationEntry[] => {
+        return Array.from(citationsRef.current.values());
+    }, []);
+
+    const getCitationNumber = useCallback((id: string): number | undefined => {
+        const keys = Array.from(citationsRef.current.keys());
+        const idx = keys.indexOf(id);
+        return idx >= 0 ? idx + 1 : undefined;
+    }, []);
 
     const nextSlide = () => {
         setCurrentSlide((prev) => Math.min(prev + 1, totalSlides - 1));
@@ -78,6 +116,9 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
                 printMode,
                 setPrintMode,
                 printToPDF,
+                registerCitation,
+                getCitations,
+                getCitationNumber,
             }}
         >
             {children}
