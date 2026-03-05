@@ -121,7 +121,7 @@ function FiveAssetSlide() {
     const tangencyPoint: ScatterPoint = {
         x: result.tangency.risk,
         y: result.tangency.expectedReturn,
-        color: "#ffd93d",
+        color: "#f59f00",
         radius: 8,
         label: `Tangency (Sharpe ${result.tangency.sharpe.toFixed(2)})`,
     };
@@ -129,7 +129,7 @@ function FiveAssetSlide() {
     const mvPoint: ScatterPoint = {
         x: result.minVariance.risk,
         y: result.minVariance.expectedReturn,
-        color: "#ff6b6b",
+        color: "#f03e3e",
         radius: 7,
         label: "Min Variance",
     };
@@ -226,7 +226,7 @@ function InteractiveSlide() {
             { x: 0, y: rf },
             { x: cmlEnd, y: rf + result.tangency.sharpe * cmlEnd },
         ],
-        color: "rgba(255,217,61,0.5)",
+        color: "rgba(245,159,0,0.5)",
         lineWidth: 2,
         label: "CML",
     };
@@ -234,7 +234,7 @@ function InteractiveSlide() {
     const tangencyPoint: ScatterPoint = {
         x: result.tangency.risk,
         y: result.tangency.expectedReturn,
-        color: "#ffd93d",
+        color: "#f59f00",
         radius: 8,
         label: `Tangency (Sharpe ${result.tangency.sharpe.toFixed(2)})`,
     };

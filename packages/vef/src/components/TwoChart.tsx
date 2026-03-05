@@ -93,7 +93,7 @@ export function TwoChart({
         twoRef.current = two;
 
         // ── Grid lines ──
-        const gridColor = "rgba(255,255,255,0.06)";
+        const gridColor = "rgba(0,0,0,0.06)";
         const tickCount = 6;
         for (let i = 0; i <= tickCount; i++) {
             const frac = i / tickCount;
@@ -117,7 +117,7 @@ export function TwoChart({
                 gx,
                 padding.top + chartH + 20,
             );
-            xTick.fill = "#8888a0";
+            xTick.fill = "#868e96";
             xTick.size = 11;
             xTick.family = "Inter, sans-serif";
 
@@ -128,14 +128,14 @@ export function TwoChart({
                 padding.left - 16,
                 gy,
             );
-            yTick.fill = "#8888a0";
+            yTick.fill = "#868e96";
             yTick.size = 11;
             yTick.family = "Inter, sans-serif";
             yTick.alignment = "right";
         }
 
         // ── Axes ──
-        const axisColor = "rgba(255,255,255,0.15)";
+        const axisColor = "rgba(0,0,0,0.15)";
         const xAxis = two.makeLine(
             padding.left, padding.top + chartH,
             padding.left + chartW, padding.top + chartH
@@ -153,14 +153,14 @@ export function TwoChart({
         // ── Axis labels ──
         if (xLabel) {
             const xl = two.makeText(xLabel, padding.left + chartW / 2, height - 12);
-            xl.fill = "#8888a0";
+            xl.fill = "#495057";
             xl.size = 13;
             xl.family = "Inter, sans-serif";
             xl.weight = 500;
         }
         if (yLabel) {
             const yl = two.makeText(yLabel, 16, padding.top + chartH / 2);
-            yl.fill = "#8888a0";
+            yl.fill = "#495057";
             yl.size = 13;
             yl.family = "Inter, sans-serif";
             yl.weight = 500;
@@ -168,7 +168,7 @@ export function TwoChart({
         }
         if (title) {
             const tl = two.makeText(title, width / 2, 20);
-            tl.fill = "#e8e8f0";
+            tl.fill = "#212529";
             tl.size = 16;
             tl.family = "Inter, sans-serif";
             tl.weight = 700;
@@ -206,7 +206,7 @@ export function TwoChart({
 
             if (sp.label) {
                 const lbl = two.makeText(sp.label, cx + r + 8, cy - 2);
-                lbl.fill = "#e8e8f0";
+                lbl.fill = "#495057";
                 lbl.size = 11;
                 lbl.family = "Inter, sans-serif";
                 lbl.alignment = "left";
