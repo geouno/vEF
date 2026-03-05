@@ -10,6 +10,7 @@ export interface ChartSeries {
     points: Point[];
     color: string;
     lineWidth?: number;
+    lineDash?: number[];
     label?: string;
 }
 
@@ -188,6 +189,9 @@ export function TwoChart({
             path.closed = false;
             path.cap = "round";
             path.join = "round";
+            if (s.lineDash) {
+                path.dashes = s.lineDash;
+            }
         }
 
         // ── Scatter points ──

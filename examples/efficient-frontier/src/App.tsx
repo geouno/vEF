@@ -63,6 +63,13 @@ function SimpleEFSlide() {
         label: "Efficient Frontier",
     };
 
+    const suboptimalSeries: ChartSeries = {
+        points: result.suboptimalFrontier.map((p) => ({ x: p.risk, y: p.expectedReturn })),
+        color: "#6c63ff",
+        lineWidth: 1.5,
+        lineDash: [5, 5],
+    };
+
     const assetScatter: ScatterPoint[] = result.assetPoints.map((a) => ({
         x: a.risk,
         y: a.expectedReturn,
@@ -92,7 +99,7 @@ function SimpleEFSlide() {
             <h1>3-Asset Example</h1>
             <h2>Stocks · Bonds · Gold</h2>
             <TwoChart
-                series={[frontierSeries]}
+                series={[frontierSeries, suboptimalSeries]}
                 scatter={[...assetScatter, tangencyPoint, mvPoint]}
                 xLabel="Risk (σ)"
                 yLabel="Expected Return"
@@ -108,6 +115,13 @@ function FiveAssetSlide() {
         points: result.frontier.map((p) => ({ x: p.risk, y: p.expectedReturn })),
         color: "#6c63ff",
         lineWidth: 3,
+    };
+
+    const suboptimalSeries: ChartSeries = {
+        points: result.suboptimalFrontier.map((p) => ({ x: p.risk, y: p.expectedReturn })),
+        color: "#6c63ff",
+        lineWidth: 1.5,
+        lineDash: [5, 5],
     };
 
     const assetScatter: ScatterPoint[] = result.assetPoints.map((a) => ({
@@ -139,7 +153,7 @@ function FiveAssetSlide() {
             <h1>5-Asset Diversified Portfolio</h1>
             <h2>US Equity · Intl Equity · Bonds · Real Estate · Commodities</h2>
             <TwoChart
-                series={[frontierSeries]}
+                series={[frontierSeries, suboptimalSeries]}
                 scatter={[...assetScatter, tangencyPoint, mvPoint]}
                 xLabel="Risk (σ)"
                 yLabel="Expected Return"
@@ -219,6 +233,13 @@ function InteractiveSlide() {
         lineWidth: 3,
     };
 
+    const suboptimalSeries: ChartSeries = {
+        points: result.suboptimalFrontier.map((p) => ({ x: p.risk, y: p.expectedReturn })),
+        color: "#6c63ff",
+        lineWidth: 1.5,
+        lineDash: [5, 5],
+    };
+
     // Capital Market Line (from rf through tangency)
     const cmlEnd = result.tangency.risk * 2.5;
     const cmlSeries: ChartSeries = {
@@ -257,7 +278,7 @@ function InteractiveSlide() {
                 />
             </div>
             <TwoChart
-                series={[frontierSeries, cmlSeries]}
+                series={[frontierSeries, suboptimalSeries, cmlSeries]}
                 scatter={[tangencyPoint]}
                 xLabel="Risk (σ)"
                 yLabel="Expected Return"

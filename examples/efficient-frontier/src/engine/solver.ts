@@ -39,6 +39,8 @@ export interface EFOutput {
     minVariance: PortfolioPoint;
     /** Maximum Sharpe (tangency) portfolio */
     tangency: PortfolioPoint;
+    /** Suboptimal branch of the frontier (below min-variance) */
+    suboptimalFrontier: PortfolioPoint[];
     /** Individual asset positions for scatter overlay */
     assetPoints: { name: string; risk: number; expectedReturn: number }[];
 }
@@ -112,12 +114,9 @@ export function solve(input: EFInput): EFOutput {
     const step = (muMax - muMin) / resolution;
 
     const frontier: PortfolioPoint[] = [];
+    const suboptimalFrontier: PortfolioPoint[] = [];
 
-    for (let i = 0; i <= resolution; i++) {
-        const target = muMin + i * step;
-        // Weights: w = g + h * target  where
-        //   g = (1/D)(B Σ⁻¹ 1 - A Σ⁻¹ μ)
-        //   h = (1/D)(C Σ⁻¹ μ - A Σ⁻¹ 1)
+    const getPoint = (target: number): PortfolioPoint => {
         const weights = Array(n);
         for (let j = 0; j < n; j++) {
             const g = (B * SigmaInv1[j] - A * SigmaInvMu[j]) / D;
@@ -135,7 +134,12 @@ export function solve(input: EFInput): EFOutput {
         const risk = Math.sqrt(Math.max(variance, 0));
         const sharpe = risk > 0 ? (target - rf) / risk : 0;
 
-        frontier.push({ risk, expectedReturn: target, weights, sharpe });
+        return { risk, expectedReturn: target, weights, sharpe };
+    };
+
+    for (let i = 0; i <= resolution; i++) {
+        frontier.push(getPoint(muMin + i * step));
+        suboptimalFrontier.push(getPoint(muMin - i * step));
     }
 
     // ─ Min-variance portfolio ─
@@ -173,5 +177,5 @@ export function solve(input: EFInput): EFOutput {
         expectedReturn: a.expectedReturn,
     }));
 
-    return { frontier, minVariance, tangency, assetPoints };
+    return { frontier, suboptimalFrontier, minVariance, tangency, assetPoints };
 }
