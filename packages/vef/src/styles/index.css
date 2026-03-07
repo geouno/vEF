@@ -1,11 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
+
 @font-face {
   font-family: 'Martina Plantijn';
   src: url('./fonts/martina-plantijn.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
 :root {
   --bg-primary: #f8f9fa;
@@ -16,6 +16,7 @@
   --text-muted: #868e96;
   --accent: #016853;
   --accent-glow: rgba(1, 104, 83, 0.15);
+  --accent-soft: rgba(1, 104, 83, 0.08);
   --success: #0ca678;
   --warning: #f59f00;
   --danger: #f03e3e;
@@ -124,6 +125,66 @@ pre {
   font-weight: 600;
   color: var(--text-muted);
   font-variant-numeric: tabular-nums;
+}
+
+.slide-wrapper {
+  position: relative;
+}
+
+.section-progress {
+  position: absolute;
+  left: 64px;
+  right: 64px;
+  bottom: 22px;
+  display: flex;
+  gap: 10px;
+  z-index: 20;
+}
+
+.section-progress__item {
+  flex: 1 1 0;
+  min-width: 0;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  background: var(--accent-soft);
+  color: color-mix(in srgb, var(--accent) 70%, var(--text-secondary));
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.section-progress__item:hover {
+  background: color-mix(in srgb, var(--accent) 12%, white);
+}
+
+.section-progress__item.is-complete {
+  color: var(--accent);
+}
+
+.section-progress__item.is-active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, white);
+  color: var(--accent);
+}
+
+.section-progress__item:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent) 35%, white);
+  outline-offset: 2px;
+}
+
+.section-progress__label {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ── Chart Container ────────────────────── */
@@ -330,6 +391,12 @@ pre {
     border: none;
     padding: 60px 72px;
     box-sizing: border-box;
+  }
+
+  .slide-deck.print-mode .section-progress,
+  .slide-deck.print-mode .section-progress__item {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
   }
 }
 

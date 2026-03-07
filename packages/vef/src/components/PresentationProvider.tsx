@@ -10,13 +10,24 @@ export interface CitationEntry {
     accessDate?: string;
 }
 
+export interface PresentationSection {
+    title: string;
+    startSlide: number;
+    endSlide: number;
+}
+
 export interface PresentationContextType {
     currentSlide: number;
     totalSlides: number;
+    sections: PresentationSection[];
+    currentSectionIndex: number;
+    currentSection?: PresentationSection;
     nextSlide: () => void;
     prevSlide: () => void;
     goToSlide: (index: number) => void;
+    goToSection: (index: number) => void;
     setTotalSlides: (total: number) => void;
+    setSections: (sections: PresentationSection[]) => void;
     printMode: boolean;
     setPrintMode: (mode: boolean) => void;
     printToPDF: () => void;
@@ -39,6 +50,7 @@ export function usePresentation() {
 export function PresentationProvider({ children }: { children: ReactNode }) {
     const [currentSlide, setCurrentSlide] = useState(0);
     const [totalSlides, setTotalSlides] = useState(0);
+    const [sections, setSections] = useState<PresentationSection[]>([]);
     const [printMode, setPrintMode] = useState(false);
 
     // Citation registry — Map preserves insertion order
@@ -79,6 +91,13 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
         }
     };
 
+    const goToSection = useCallback((index: number) => {
+        const section = sections[index];
+        if (section) {
+            setCurrentSlide(Math.min(section.startSlide, Math.max(totalSlides - 1, 0)));
+        }
+    }, [sections, totalSlides]);
+
     const printToPDF = () => {
         setPrintMode(true);
         // Wait for the next tick for React to render all slides (removing the deck overflow clip)
@@ -104,15 +123,25 @@ export function PresentationProvider({ children }: { children: ReactNode }) {
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [nextSlide, prevSlide, printMode]);
 
+    const currentSectionIndex = sections.findIndex(
+        (section) => currentSlide >= section.startSlide && currentSlide <= section.endSlide
+    );
+    const currentSection = currentSectionIndex >= 0 ? sections[currentSectionIndex] : undefined;
+
     return (
         <PresentationContext.Provider
             value={{
                 currentSlide,
                 totalSlides,
+                sections,
+                currentSectionIndex,
+                currentSection,
                 nextSlide,
                 prevSlide,
                 goToSlide,
+                goToSection,
                 setTotalSlides,
+                setSections,
                 printMode,
                 setPrintMode,
                 printToPDF,

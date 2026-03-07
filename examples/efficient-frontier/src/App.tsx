@@ -1,4 +1,4 @@
-import { SlideDeck, Slide, TwoChart, PresentationProvider, type ChartSeries, type ScatterPoint } from "vef";
+import { SlideDeck, Slide, SlideSection, TwoChart, PresentationProvider, type ChartSeries, type ScatterPoint } from "vef";
 import { solve } from "./engine/solver";
 import { FIVE_ASSET_PORTFOLIO, THREE_ASSET_SIMPLE } from "./engine/data";
 import { useMemo, useState } from "react";
@@ -315,14 +315,22 @@ export default function App() {
     return (
         <div style={{ display: "flex", justifyContent: "center" }}>
             <PresentationProvider>
-                <SlideDeck>
+                <SlideDeck showSectionProgress>
                     <TitleSlide />
-                    <ConceptSlide />
-                    <SimpleEFSlide />
-                    <FiveAssetSlide />
-                    <WeightsSlide />
-                    <InteractiveSlide />
-                    <TakeawaySlide />
+                    <SlideSection title="Overview">
+                        <ConceptSlide />
+                        <SimpleEFSlide />
+                    </SlideSection>
+                    <SlideSection title="Analysis">
+                        <FiveAssetSlide />
+                        <WeightsSlide />
+                    </SlideSection>
+                    <SlideSection title="Interaction">
+                        <InteractiveSlide />
+                    </SlideSection>
+                    <SlideSection title="Takeaways">
+                        <TakeawaySlide />
+                    </SlideSection>
                 </SlideDeck>
             </PresentationProvider>
         </div>
